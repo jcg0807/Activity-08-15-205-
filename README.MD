@@ -21,7 +21,14 @@ Follow these steps to get the project up and running on your local machine.
 
 ```bash
 git clone https://github.com/jcg0807/Activity-08-15-205-.git
+cd Activity-08-15-205-
 ```
+
+### install Pillow
+```bash
+python -m pip install Pillow
+```
+
 ### Run the Server
 ```bash
 py manage.py runserver
