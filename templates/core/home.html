@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Django Twitter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1da1f2;
+            --secondary: #15202b;
+            --light: #192734;
+            --text: #ffffff;
+            --text-secondary: #8899a6;
+            --border: #38444d;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(21, 32, 43, 0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+
+        .tweet-card {
+            background-color: var(--light);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .tweet-card:hover {
+            background-color: #1c2732;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px 8px;
+        }
+
+        .tweet-content {
+            padding: 0 20px 16px;
+        }
+
+        .tweet-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .tweet-action {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .tweet-action:hover {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .username {
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .handle {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .tweet-time {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tweet-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .tweet-image {
+            width: 100%;
+            border-radius: 16px;
+            margin-top: 15px;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 700;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a91da;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #1a2b3a, #0d1b28);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        .action-icon {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-dropdown .dropdown-menu {
+            background-color: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 200px;
+        }
+
+        .user-dropdown .dropdown-item {
+            color: var(--text);
+            padding: 10px 20px;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: var(--primary);
+        }
+
+        .user-dropdown .dropdown-divider {
+            border-color: var(--border);
+        }
+
+        .content-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .nav-icon:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="logo">
+                    <i class="fab fa-twitter"></i> DjangoX
+                </span>
+            </a>
+
+            <div class="d-flex align-items-center">
+                {% if user.is_authenticated %}
+                <div class="d-none d-lg-block me-4">
+                    <a href="{% url 'tweet_create' %}" class="btn btn-primary">
+                        <i class="fas fa-feather-alt me-2"></i>Tweet
+                    </a>
+                </div>
+                {% endif %}
+
+                <ul class="navbar-nav d-flex flex-row">
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" href="#">
+                            <i class="fas fa-home"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" href="#">
+                            <i class="fas fa-hashtag"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" href="#">
+                            <i class="fas fa-bell"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" href="https://github.com/jcg0807">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- User Dropdown -->
+                {% if user.is_authenticated %}
+                <div class="dropdown user-dropdown ms-3">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar bg-primary text-white me-2">
+                            {{ user.username|first|upper }}
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <div class="d-flex align-items-center px-3 py-2">
+                                <div class="avatar bg-primary text-white me-3">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold" style="color: #27BBF5;">@{{ user.username }}</div>
+                                    <small class="mb-0" style="color: #27BBF5;">{{ user.email }}</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="https://github.com/jcg0807"><i class="fas fa-user me-2"></i>Github</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Log Out
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="ms-3">
+                    <a href="{% url 'login' %}" class="btn btn-outline me-2">Log in</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Sign up</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="mb-3">Welcome to DjangoX</h1>
+
+            {% if user.is_authenticated %}
+                <div class="d-flex align-items-center mb-4">
+                    <div class="avatar bg-primary text-white">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <div>
+                        <h4 class="mb-0">Hello, {{ user.username }}!</h4>
+                        <p class="mb-0 ">What's happening today?</p>
+                    </div>
+                </div>
+                <a href="{% url 'tweet_create' %}" class="btn btn-primary d-block">
+                    <i class="fas fa-feather-alt me-2"></i>Create Tweet
+                </a>
+            {% else %}
+                <p class="lead mb-4">Register now to express your thoughts.</p>
+                <div class="d-grid gap-3">
+                    <a href="{% url 'login' %}" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Log In
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-outline">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Tweet Feed -->
+        <h2 class="mb-4"><i class="fas fa-stream me-2"></i>Latest Tweets</h2>
+
+        {% if tweets %}
+            {% for tweet in tweets %}
+                <div class="tweet-card">
+                    <div class="tweet-header">
+                        <div class="avatar bg-info text-white">
+                            {{ tweet.user.username|first|upper }}
+                        </div>
+                        <div class="user-info">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="username mb-0">@{{ tweet.user.username }}</h5>
+                                    <p class="handle mb-0">{{ tweet.user.get_full_name|default:tweet.user.username }}</p>
+                                </div>
+                                <span class="tweet-time">{{ tweet.created_at|timesince }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tweet-content">
+                        <p class="tweet-text">{{ tweet.text }}</p>
+
+                        {% if tweet.image %}
+                            <img src="{{ tweet.image.url }}" alt="Tweet Image" class="tweet-image">
+                        {% endif %}
+                    </div>
+
+                    <div class="tweet-actions">
+                        <a href="tweet/create/" class="tweet-action">
+                            <i class="far fa-comment action-icon"></i>
+                        </a>
+                        <a href="tweet/create/" class="tweet-action">
+                            <i class="fas fa-retweet action-icon"></i>
+                        </a>
+                        <a href="#" class="tweet-action">
+                            <i class="far fa-heart action-icon"></i>
+                        </a>
+                        <a href="tweet/create/" class="tweet-action">
+                            <i class="far fa-share-square action-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-dove"></i>
+                <h3>No tweets yet</h3>
+                <p class="mb-4">Be the first to share your thoughts!</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'tweet_create' %}" class="btn btn-primary">
+                        <i class="fas fa-feather-alt me-2"></i>Create First Tweet
+                    </a>
+                {% else %}
+                    <p>Log in to start tweeting</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 DjangoX. All rights reserved(Sample Webpage).</p>
+            <div class="mt-2">
+                <a href="#" class="text-muted me-3">Terms</a>
+                <a href="#" class="text-muted me-3">Privacy</a>
+                <a href="#" class="text-muted me-3">Cookies</a>
+                <a href="#" class="text-muted">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
