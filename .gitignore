@@ -1,0 +1,37 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django specific
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# SQLite database
+db.sqlite3
+
+# Uploaded media files
+media/
+
+# Static files collected with collectstatic
+staticfiles/
+
+# Environment variables
+.env
+*.env
+
+# Virtual environment folders
+venv/
+ENV/
+env/
+.venv/
+
+# IDE / Editor settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
