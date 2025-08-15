@@ -24,11 +24,15 @@ git clone https://github.com/jcg0807/Activity-08-15-205-.git
 cd Activity-08-15-205-
 ```
 
-### install Pillow
+### Install Pillow
 ```bash
 python -m pip install Pillow
 ```
-
+### Make migrations & migrate
+```bash
+python manage.py makemigrations 
+python manage.py migrate 
+```
 ### Run the Server
 ```bash
 py manage.py runserver
